@@ -1,4 +1,5 @@
 from flask import Flask, jsonify
+from flask import request
 from flask_sqlalchemy import SQLAlchemy
 from dotenv import load_dotenv
 import os
@@ -53,7 +54,7 @@ class Empleado(db.Model):
     usuario = db.Column(db.String(50), unique=True, nullable=False)
     password = db.Column(db.String(255), nullable=False)
 
-# Ruta para obtener todos los clientes
+# Ruta para obtener todos los clientes GET
 @app.route('/clientes', methods=['GET'])
 def get_clientes():
     clientes = Cliente.query.all()  # Obtener todos los registros de clientes
@@ -70,6 +71,34 @@ def get_clientes():
         })
     
     return jsonify(clientes_list)
+
+#POST para crear un nuevo cliente
+@app.route('/clientes', methods=['POST'])
+def crear_cliente():
+    data = request.get_json()
+    nuevo_cliente = Cliente(
+        nombre=data['nombre'],
+        telefono=data.get('telefono'),  # puede venir o no
+        tipo_plan=data.get('tipo_plan'),
+        fecha_inicio=data.get('fecha_inicio')  # viene como string yyyy-mm-dd
+    )
+    db.session.add(nuevo_cliente)
+    db.session.commit()
+    
+    return jsonify({'mensaje': 'Cliente creado correctamente'}), 201
+
+#DELETE para eliminar un cliente
+@app.route('/clientes/<int:id>', methods=['DELETE'])
+def eliminar_cliente(id):
+    cliente = Cliente.query.get(id)  # Buscar el cliente por su id
+    
+    if cliente is None:
+        return jsonify({'mensaje': 'Cliente no encontrado'}), 404
+    
+    db.session.delete(cliente)  # Eliminar el cliente
+    db.session.commit()  # Confirmar los cambios
+    
+    return jsonify({'mensaje': 'Cliente eliminado correctamente'}), 200
 
 # Ruta para obtener todos los pagos de un cliente
 @app.route('/pagos/<int:cliente_id>', methods=['GET'])
