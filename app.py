@@ -156,5 +156,31 @@ def get_asistencias(cliente_id):
     
     return jsonify(asistencias_list)
 
+@app.route('/asistencias', methods=['POST'])
+def agregar_asistencia():
+    data = request.get_json()  # Diccionario con los datos de la asistencia
+
+    cliente_id = data.get('cliente_id')  # Trae None si no viene
+
+    # Verificar si vino el cliente_id en el JSON
+    if not cliente_id:
+        return jsonify({'mensaje': 'cliente_id es obligatorio'}), 400
+
+    # Verificar si ese cliente existe en la base de datos
+    cliente = Cliente.query.get(cliente_id)
+    if not cliente:
+        return jsonify({'mensaje': 'Cliente no encontrado'}), 404
+
+    nueva_asistencia = Asistencia(
+        cliente_id=cliente_id,
+        fecha_asistencia=data['fecha_asistencia']  # viene como string yyyy-mm-dd
+    )
+    db.session.add(nueva_asistencia)
+    db.session.commit()
+
+    return jsonify({'mensaje': 'Asistencia agregada correctamente'}), 201
+
+
+
 if __name__ == '__main__':
     app.run(debug=True)
