@@ -20,7 +20,7 @@ db = SQLAlchemy(app)
 
 # Definir los modelos que representan las tablas de tu base de datos
 
-class Cliente(db.Model):
+class Cliente(db.Model): 
     __tablename__ = 'clientes'  # El nombre de la tabla
     id = db.Column(db.Integer, primary_key=True)
     nombre = db.Column(db.String(255), nullable=False)
@@ -53,6 +53,12 @@ class Empleado(db.Model):
     rol = db.Column(db.String(50))
     usuario = db.Column(db.String(50), unique=True, nullable=False)
     password = db.Column(db.String(255), nullable=False)
+
+
+
+
+
+
 
 # Ruta para obtener todos los clientes GET
 @app.route('/clientes', methods=['GET'])
@@ -116,6 +122,24 @@ def get_pagos(cliente_id):
         })
     
     return jsonify(pagos_list)
+
+# PUT modificar un cliente.
+@app.route('/clientes/<int:id>', methods=['PUT'])
+def actualizar_cliente(id):
+    cliente = Cliente.query.get(id)
+    if cliente is None:
+        return jsonify({'mensaje': 'Cliente no encontrado'}), 404
+
+    data = request.get_json()
+
+    # Actualizar los campos si vienen en la solicitud
+    cliente.nombre = data.get('nombre', cliente.nombre)
+    cliente.telefono = data.get('telefono', cliente.telefono)
+    cliente.tipo_plan = data.get('tipo_plan', cliente.tipo_plan)
+    cliente.fecha_inicio = data.get('fecha_inicio', cliente.fecha_inicio)
+
+    db.session.commit()
+    return jsonify({'mensaje': 'Cliente actualizado correctamente'})
 
 # Ruta para obtener todas las asistencias de un cliente
 @app.route('/asistencias/<int:cliente_id>', methods=['GET'])
