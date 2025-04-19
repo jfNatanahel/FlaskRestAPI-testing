@@ -2,13 +2,17 @@ from flask import Flask, jsonify
 from flask import request
 from flask_sqlalchemy import SQLAlchemy
 from dotenv import load_dotenv
+from flask_cors import CORS  # Importa CORS
 import os
+
 
 # Cargar las variables de entorno desde el archivo .env
 load_dotenv()
 
 # Crear la aplicación Flask
 app = Flask(__name__)
+
+CORS(app)  # Habilitar CORS para la aplicación Flask
 
 # Configuración de la base de datos (reemplaza los valores con tus datos)
 #app.config['SQLALCHEMY_DATABASE_URI'] = f"postgresql://{os.getenv('control_fzyp_user')}:{os.getenv('ECCmPYrvMteFm6D6kmomXq8OTwbYOtx6')}@{os.getenv('dpg-cvoosbqdbo4c73b72pk0-a.oregon-postgres.render.com')}:{os.getenv('5432')}/{os.getenv('control_fzyp')}"
@@ -141,6 +145,8 @@ def actualizar_cliente(id):
     db.session.commit()
     return jsonify({'mensaje': 'Cliente actualizado correctamente'})
 
+
+
 # Ruta para obtener todas las asistencias de un cliente
 @app.route('/asistencias/<int:cliente_id>', methods=['GET'])
 def get_asistencias(cliente_id):
@@ -155,6 +161,24 @@ def get_asistencias(cliente_id):
         })
     
     return jsonify(asistencias_list)
+
+@app.route('/asistencias/<int:id>', methods=['PUT'])
+
+def actualizar_asistencia(id):
+    asistencia = Asistencia.query.get(id)
+    if asistencia is None:
+        return jsonify({'mensaje': 'Asistencia no encontrada'}), 404
+
+    data = request.get_json() ## Trae un diccionario con los datos de la asistencia
+
+    # Actualizar los campos si vienen en la solicitud
+    asistencia.fecha_asistencia = data.get('fecha_asistencia', asistencia.fecha_asistencia)
+ 
+
+    db.session.commit()
+    return jsonify({'mensaje': 'Cliente actualizado correctamente'})
+
+
 
 @app.route('/asistencias', methods=['POST'])
 def agregar_asistencia():
@@ -180,7 +204,20 @@ def agregar_asistencia():
 
     return jsonify({'mensaje': 'Asistencia agregada correctamente'}), 201
 
+@app.route('/asistencias/<int:id>', methods=['DELETE'])
+def eliminar_asistencia(id):
+    data = request.get_json()
+    asistencia = Asistencia.query.get(id)  # Buscar el cliente por su id
+    
+    if asistencia is None:
+        return jsonify({'mensaje': 'Cliente no encontrado'}), 404
+    
+    db.session.delete(asistencia)  # Eliminar el cliente
+    db.session.commit()  # Confirmar los cambios
+    
+    return jsonify({'mensaje': 'Cliente eliminado correctamente'}), 200
+
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, host='0.0.0.0', port=5000)
