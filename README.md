@@ -49,7 +49,7 @@ Este backend se comunica con una base de datos alojada en **Render**, y expone u
 
 Instalación
 1. Clona el repositorio:
-   PASO1: git clone https://github.com/jfNatanahel/requirements.git (tener instalado git)
+   PASO1: git clone https://github.com/jfNatanahel/FlaskRestAPI-testing.git (tener instalado git)
    PASO2: cd FlaskRestAPI-testing
    PASO3: code . (abrir vs code)
 
