@@ -49,8 +49,8 @@ Este backend se comunica con una base de datos alojada en **Render**, y expone u
 
 Instalación
 1. Clona el repositorio:
-git clone https://github.com/jfNatanahel/requirements.git
-cd requirements
+-git clone https://github.com/jfNatanahel/requirements.git (tener instalado git)
+-cd requirements
 
 2. Crea un entorno virtual:
 python -m venv venv
