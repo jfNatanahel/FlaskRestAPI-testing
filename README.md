@@ -49,21 +49,22 @@ Este backend se comunica con una base de datos alojada en **Render**, y expone u
 
 Instalación
 1. Clona el repositorio:
-git clone https://github.com/tu-usuario/gym-management-api.git
-cd gym-management-api
+   PASO1: git clone https://github.com/jfNatanahel/FlaskRestAPI-testing.git (tener instalado git)
+   PASO2: cd FlaskRestAPI-testing
+   PASO3: code . (abrir vs code)
 
-2. Crea un entorno virtual:
+3. Crea un entorno virtual:
 python -m venv venv
 source venv/bin/activate  # En Linux/macOS
 venv\Scripts\activate  # En Windows
 
-3. Instala las dependencias:
+4. Instala las dependencias:
 pip install -r requirements.txt
 
-4. Configura las variables de entorno:
+5. Configura las variables de entorno:
 -Crea un archivo .env en la raíz del proyecto y agrega la URL de tu base de datos de PostgreSQL, que debe ser proporcionada por el servicio de Render o tu entorno de base de datos:
 DATABASE_URL=postgresql://usuario:contraseña@host:puerto/nombre_base_de_datos
 
-5. Ejecuta la aplicación:
+6. Ejecuta la aplicación:
 python app.py
 
