@@ -65,6 +65,11 @@ pip install -r requirements.txt
 -Crea un archivo .env en la raíz del proyecto y agrega la URL de tu base de datos de PostgreSQL, que debe ser proporcionada por el servicio de Render o tu entorno de base de datos:
 DATABASE_URL=postgresql://usuario:contraseña@host:puerto/nombre_base_de_datos
 
-6. Ejecuta la aplicación:
+7. Ejecuta la aplicación:
 python app.py
 
+## Agradecimientos
+Prof. Pablo Sandoval.
+Prof. Nicolas Martinelli.
+Instituto de innovacion y tecnologia aplicada. 
+A mi familia :)
